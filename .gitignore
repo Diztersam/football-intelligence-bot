@@ -1,0 +1,48 @@
+venv/
+.env
+__pycache__/
+*.pyc
+*.db
+
+# Secrets and environment
+.env
+.env.*
+!.env.example
+
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Local databases and runtime files
+*.db
+*.sqlite
+*.sqlite3
+*.log
+.pipeline.lock
+
+# Frontend
+node_modules/
+dist/
+
+# Backups and archives
+backups/
+*.tar.gz
+
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.db
+*.sqlite
+*.sqlite3
+*.log
+.pipeline.lock
+node_modules/
+dist/
+backups/
+*.tar.gz

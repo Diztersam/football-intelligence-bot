@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, sans-serif;
+  color: #e5eee9;
+  background: #0b1512;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #0b1512;
+}
+
+button { cursor: pointer; }

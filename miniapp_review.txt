@@ -1,0 +1,534 @@
+========== FASTAPI BACKEND ==========
+from pathlib import Path
+import sqlite3
+
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+DATABASE = BASE_DIR / "football.db"
+
+app = FastAPI(
+    title="Football Intelligence API",
+    description="API for the Football Intelligence Mini App",
+    version="1.1.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Clearly identifiable non-football or unreliable catch-all competitions.
+EXCLUDED_LEAGUE_PATTERNS = [
+    "%hockey%",
+    "del %",
+    "del2 %",
+    "%darts%",
+    "%esp8266%",
+    "%spiele mit arminia bielefeld beteiligung%"
+]
+
+
+def get_connection():
+    if not DATABASE.exists():
+        raise FileNotFoundError(
+            f"Database not found: {DATABASE}"
+        )
+
+    connection = sqlite3.connect(DATABASE)
+    connection.row_factory = sqlite3.Row
+    return connection
+
+
+def exclusion_sql():
+    return " AND ".join(
+        ["LOWER(league) NOT LIKE ?" for _ in EXCLUDED_LEAGUE_PATTERNS]
+    )
+
+
+def exclusion_values():
+    return tuple(
+        pattern.lower()
+        for pattern in EXCLUDED_LEAGUE_PATTERNS
+    )
+
+
+@app.get("/")
+def home():
+    return {
+        "name": "Football Intelligence API",
+        "status": "online",
+        "version": "1.1.0",
+        "database_exists": DATABASE.exists()
+    }
+
+
+@app.get("/api/health")
+def health():
+    return {
+        "status": "online",
+        "database_exists": DATABASE.exists(),
+        "database": str(DATABASE)
+    }
+
+
+@app.get("/api/fixtures")
+def get_fixtures(
+    limit: int = Query(default=50, ge=1, le=100),
+    source: str = Query(default="all")
+):
+    if source not in ("all", "football-data", "openligadb"):
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid source. Use all, football-data or openligadb."
+        )
+
+    source_condition = ""
+
+    if source == "football-data":
+        source_condition = " AND event_id LIKE 'football-data:%'"
+    elif source == "openligadb":
+        source_condition = " AND event_id LIKE 'openligadb:%'"
+
+    with get_connection() as connection:
+
+        total = connection.execute("""
+            SELECT COUNT(*)
+            FROM fixtures
+            WHERE julianday(kickoff_utc) >= julianday('now')
+        """).fetchone()[0]
+
+        filtered_count = connection.execute(f"""
+            SELECT COUNT(*)
+            FROM fixtures
+            WHERE julianday(kickoff_utc) >= julianday('now')
+            {source_condition}
+            AND {exclusion_sql()}
+        """, exclusion_values()).fetchone()[0]
+
+        rows = connection.execute(f"""
+            SELECT
+                event_id,
+                league,
+                home_team,
+                away_team,
+                kickoff_utc,
+                kickoff_lagos,
+                match_status,
+                CASE
+                    WHEN event_id LIKE 'football-data:%'
+                        THEN 'football-data'
+                    WHEN event_id LIKE 'openligadb:%'
+                        THEN 'openligadb'
+                    ELSE 'other'
+                END AS source
+            FROM fixtures
+            WHERE julianday(kickoff_utc) >= julianday('now')
+            {source_condition}
+            AND {exclusion_sql()}
+            ORDER BY julianday(kickoff_utc) ASC
+            LIMIT ?
+        """, (*exclusion_values(), limit)).fetchall()
+
+    fixtures_list = [dict(row) for row in rows]
+
+    return {
+        "count": len(fixtures_list),
+        "available_after_filter": filtered_count,
+        "before_filter": total,
+        "excluded": total - filtered_count,
+        "source_filter": source,
+        "fixtures": fixtures_list
+    }
+
+
+@app.get("/api/fixtures/{event_id}")
+def fixture_details(event_id: str):
+
+    with get_connection() as connection:
+        row = connection.execute("""
+            SELECT *
+            FROM fixtures
+            WHERE event_id = ?
+        """, (event_id,)).fetchone()
+
+    if row is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Fixture not found"
+        )
+
+    league = (row["league"] or "").lower()
+
+    if any(
+        pattern.replace("%", "") in league
+        for pattern in EXCLUDED_LEAGUE_PATTERNS
+    ):
+        raise HTTPException(
+            status_code=404,
+            detail="This competition is excluded from the football API"
+        )
+
+    return dict(row)
+========== REACT FRONTEND ==========
+import { useEffect, useMemo, useState } from 'react'
+import {
+  Activity, LayoutDashboard, Trophy, Target, Newspaper,
+  FileText, ShieldCheck, Menu, Search, Bell, ChevronRight,
+  TrendingUp, Clock3, Zap, CircleDot, BarChart3,
+  ArrowUpRight, CalendarDays, X, RefreshCw, AlertCircle
+} from 'lucide-react'
+
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '')
+
+const nav = [
+  { name: 'Overview', icon: LayoutDashboard },
+  { name: 'Match Centre', icon: Trophy },
+  { name: 'Predictions', icon: Target },
+  { name: 'Team Intelligence', icon: Newspaper },
+  { name: 'Reports', icon: FileText }
+]
+
+function formatKickoff(fixture) {
+  const value = fixture.kickoff_lagos || fixture.kickoff_utc
+  if (!value) return 'Time unavailable'
+
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+
+  return new Intl.DateTimeFormat('en-NG', {
+    timeZone: 'Africa/Lagos',
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  }).format(date)
+}
+
+function App() {
+  const [page, setPage] = useState('Overview')
+  const [selected, setSelected] = useState(null)
+  const [mobileMenu, setMobileMenu] = useState(false)
+  const [search, setSearch] = useState('')
+  const [fixtures, setFixtures] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [lastUpdated, setLastUpdated] = useState(null)
+  const [availableCount, setAvailableCount] = useState(null)
+
+  async function loadFixtures() {
+    setLoading(true)
+    setError('')
+
+    try {
+      const response = await fetch(`${API_BASE}/api/fixtures?limit=100`)
+      if (!response.ok) {
+        throw new Error(`API returned HTTP ${response.status}`)
+      }
+
+      const data = await response.json()
+      setFixtures(Array.isArray(data.fixtures) ? data.fixtures : [])
+      setAvailableCount(data.available_after_filter ?? data.count ?? null)
+      setLastUpdated(new Date())
+    } catch (err) {
+      setError(
+        `Could not load fixtures. ${err.message}. Check that the backend is running.`
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadFixtures()
+  }, [])
+
+  const filtered = useMemo(() => {
+    const term = search.trim().toLowerCase()
+    if (!term) return fixtures
+
+    return fixtures.filter(fixture =>
+      `${fixture.home_team || ''} ${fixture.away_team || ''} ${fixture.league || ''}`
+        .toLowerCase()
+        .includes(term)
+    )
+  }, [fixtures, search])
+
+  const sourceLabel = source =>
+    source === 'football-data' ? 'FOOTBALL-DATA.ORG' :
+    source === 'openligadb' ? 'OPENLIGADB' :
+    source || 'UNKNOWN SOURCE'
+
+  return (
+    <div className="min-h-screen bg-[#0b1512] text-[#e5eee9]">
+      <header className="h-16 border-b border-white/10 flex items-center justify-between px-5 md:px-8 sticky top-0 bg-[#0b1512]/95 backdrop-blur z-30">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setMobileMenu(!mobileMenu)}
+            className="md:hidden text-gray-400"
+            aria-label="Toggle menu"
+          >
+            <Menu />
+          </button>
+          <div className="h-9 w-9 rounded-xl bg-emerald-500/15 text-emerald-400 grid place-items-center">
+            <Activity size={21} />
+          </div>
+          <div>
+            <h1 className="font-bold tracking-wide text-sm">
+              FOOTBALL <span className="text-emerald-400">INTELLIGENCE</span>
+            </h1>
+            <p className="text-[9px] text-gray-500 tracking-[2px]">
+              TACTICAL ANALYTICS PLATFORM
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <span className="hidden sm:flex items-center gap-2 text-xs text-emerald-400">
+            <span className="h-2 w-2 bg-emerald-400 rounded-full animate-pulse" />
+            LIVE DATA CONNECTION
+          </span>
+          <Bell size={18} className="text-gray-400" />
+          <div className="h-8 w-8 rounded-full bg-emerald-900 border border-emerald-600 grid place-items-center text-xs font-bold">
+            FI
+          </div>
+        </div>
+      </header>
+
+      <div className="flex">
+        <aside className={`${mobileMenu ? 'flex' : 'hidden'} md:flex flex-col w-64 min-h-[calc(100vh-64px)] border-r border-white/10 p-5 bg-[#0d1915] absolute md:static z-20`}>
+          <p className="text-[10px] text-gray-500 tracking-[2px] mb-4">
+            MAIN MENU
+          </p>
+
+          <nav className="space-y-2">
+            {nav.map(item => {
+              const Icon = item.icon
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => {
+                    setPage(item.name)
+                    setMobileMenu(false)
+                  }}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition ${
+                    page === item.name
+                      ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                  }`}
+                >
+                  <Icon size={18} />
+                  {item.name}
+                  {page === item.name && <ChevronRight size={15} className="ml-auto" />}
+                </button>
+              )
+            })}
+          </nav>
+
+          <div className="mt-auto rounded-xl bg-[#14251e] border border-white/5 p-4">
+            <ShieldCheck className="text-emerald-400 mb-2" size={21} />
+            <p className="text-sm font-semibold">Intelligence Engine</p>
+            <p className="text-xs text-gray-500 mt-1">
+              Connected to the local football database.
+            </p>
+            <span className="inline-block mt-3 text-[10px] text-emerald-300 bg-emerald-400/10 px-2 py-1 rounded">
+              DATABASE CONNECTED
+            </span>
+          </div>
+        </aside>
+
+        <main className="flex-1 min-w-0 p-5 md:p-9 max-w-[1500px]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+            <div>
+              <p className="text-xs text-emerald-400 tracking-[2px] mb-2">
+                FOOTBALL INTELLIGENCE / {page.toUpperCase()}
+              </p>
+              <h2 className="text-2xl md:text-3xl font-bold">
+                {page === 'Overview' ? 'Command Centre' : page}
+              </h2>
+              <p className="text-sm text-gray-500 mt-2">
+                Real fixtures from your connected football data sources.
+              </p>
+            </div>
+
+            <button
+              onClick={loadFixtures}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-[#07110d] font-bold text-sm px-5 py-3 rounded-xl transition"
+            >
+              <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+              Refresh Fixtures
+            </button>
+          </div>
+
+          <section className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-5 mb-8">
+            {[
+              ['UPCOMING FIXTURES', loading ? '...' : fixtures.length, CalendarDays],
+              ['DATABASE FIXTURES', availableCount ?? '--', Activity],
+              ['ANALYSES AVAILABLE', 'Pending', BarChart3],
+              ['ENGINE STATUS', error ? 'Offline' : loading ? 'Loading' : 'Connected', ShieldCheck]
+            ].map(([label, value, Icon]) => (
+              <div key={label} className="bg-[#111f19] border border-white/5 rounded-2xl p-4 md:p-5">
+                <div className="flex justify-between items-center mb-4">
+                  <p className="text-[9px] md:text-[10px] text-gray-500 tracking-wider">
+                    {label}
+                  </p>
+                  <Icon size={17} className="text-emerald-400" />
+                </div>
+                <p className="text-xl md:text-2xl font-bold break-words">{value}</p>
+                <p className="text-[10px] text-gray-500 mt-2">
+                  {label === 'UPCOMING FIXTURES'
+                    ? 'Loaded into this dashboard'
+                    : label === 'DATABASE FIXTURES'
+                    ? 'Available after league filtering'
+                    : label === 'ANALYSES AVAILABLE'
+                    ? 'No prediction values assumed'
+                    : error
+                    ? 'Check backend connection'
+                    : 'API connection status'}
+                </p>
+              </div>
+            ))}
+          </section>
+
+          <section className="bg-[#111f19] border border-white/5 rounded-2xl p-5 md:p-6 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+              <div>
+                <p className="text-emerald-400 text-[10px] tracking-[2px]">
+                  MATCH INTELLIGENCE
+                </p>
+                <h3 className="text-lg font-bold mt-1">Upcoming Fixtures</h3>
+                {lastUpdated && (
+                  <p className="text-[10px] text-gray-500 mt-1">
+                    Last updated: {lastUpdated.toLocaleTimeString()}
+                  </p>
+                )}
+              </div>
+
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-3 text-gray-500" />
+                <input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search teams or leagues..."
+                  className="bg-[#0b1512] border border-white/10 rounded-xl py-2.5 pl-9 pr-3 text-sm outline-none focus:border-emerald-500 w-full sm:w-64"
+                />
+              </div>
+            </div>
+
+            {error && (
+              <div className="mb-4 flex gap-3 items-start bg-red-500/10 border border-red-500/20 rounded-xl p-4 text-sm text-red-300">
+                <AlertCircle size={18} className="shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold">Backend connection problem</p>
+                  <p className="text-xs mt-1 text-red-200/80">{error}</p>
+                  <button
+                    onClick={loadFixtures}
+                    className="mt-3 text-xs underline"
+                  >
+                    Try again
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {loading ? (
+              <div className="py-12 text-center text-gray-500">
+                <RefreshCw size={22} className="animate-spin mx-auto mb-3 text-emerald-400" />
+                <p className="text-sm">Loading fixtures from your database...</p>
+              </div>
+            ) : !error && filtered.length === 0 ? (
+              <div className="py-12 text-center text-gray-500">
+                <Trophy size={25} className="mx-auto mb-3 opacity-50" />
+                <p className="text-sm">
+                  {search ? 'No matching fixtures found.' : 'No upcoming fixtures were returned by the API.'}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {filtered.map(fixture => (
+                  <button
+                    key={fixture.event_id}
+                    onClick={() => setSelected(fixture)}
+                    className="w-full text-left bg-[#0b1812] hover:bg-[#172a20] border border-white/5 hover:border-emerald-500/30 rounded-xl p-4 transition"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-[10px] text-emerald-400 tracking-wider">
+                          {fixture.league || 'Competition unavailable'}
+                        </span>
+                        <span className="text-[9px] text-gray-600 tracking-wider">
+                          {sourceLabel(fixture.source)}
+                        </span>
+                      </div>
+                      <span className="text-xs text-gray-400 flex items-center gap-1">
+                        <Clock3 size={13} />
+                        {formatKickoff(fixture)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-semibold text-sm md:text-base flex-1">
+                        {fixture.home_team || 'Home team'}
+                      </span>
+                      <span className="text-xs text-gray-600 font-bold">VS</span>
+                      <span className="font-semibold text-sm md:text-base text-right flex-1">
+                        {fixture.away_team || 'Away team'}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[10px] text-gray-500">
+                        Status: {fixture.match_status || 'Scheduled'}
+                      </span>
+                      <span className="text-[10px] text-amber-300 bg-amber-400/10 px-2 py-1 rounded">
+                        ANALYSIS PENDING
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+========== PREDICTION DATABASE ==========
+CREATE TABLE prediction_runs (
+                prediction_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                event_id TEXT,
+                league TEXT,
+                home_team TEXT,
+                away_team TEXT,
+                kickoff_utc TEXT,
+                home_xg REAL,
+                away_xg REAL,
+                home_win REAL,
+                draw_probability REAL,
+                away_win REAL,
+                btts_yes REAL,
+                over_25 REAL,
+                confidence REAL,
+                data_quality TEXT,
+                news_risk TEXT,
+                prediction_json TEXT,
+                created_at TEXT
+            );
+CREATE INDEX idx_prediction_event
+            ON prediction_runs(event_id)
+        ;
+========== LATEST PREDICTIONS ==========
+event_id          home_team           away_team        confidence  data_quality  created_at                      
+----------------  ------------------  ---------------  ----------  ------------  --------------------------------
+openligadb:88769  Stephen Bunting     Cameron Menzies  0.74        LIMITED       2026-11-15T18:01:10.156987+00:00
+openligadb:88763  Jermaine Wattimena  Alan Soutar      0.0         INSUFFICIENT  2026-11-15T18:01:09.999324+00:00
+openligadb:88794  Jeffrey de Graaf    Henry Coates     0.0         INSUFFICIENT  2026-11-15T18:01:09.845242+00:00
+openligadb:88802  Ross Smith          Gabriel Clemens  0.0         INSUFFICIENT  2026-11-15T18:01:09.691020+00:00
+openligadb:88761  Niels Zonneveld     Beau Greaves     0.0         INSUFFICIENT  2026-11-15T18:01:09.538141+00:00
+========== TELEGRAM MINI APP CONNECTION ==========
+124:async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):

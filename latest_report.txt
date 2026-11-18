@@ -1,0 +1,493 @@
+⚽ FOOTBALL INTELLIGENCE | ANALYSIS REPORT
+================================================
+Generated: 18 Nov 2026, 12:03 AM WAT
+Duration: 32.0 minutes
+Fixture scope: maximum five selected upcoming fixtures
+
+PIPELINE STATUS
+------------------------------------------------
+SUCCESS | Fixture shortlist | 39.8s
+FAILED | Team performance | 1800s
+
+================================================
+FIXTURE SHORTLIST
+================================================
+  2026-11-22 14:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+135. SSV Jeddeloh II vs SC Weiche Flensburg 08
+   Competition: Fußball-Regionalliga Nord (2026)
+   Kick-off:   2026-11-22 14:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+136. 1. FC Phönix Lübeck vs FC St. Pauli II
+   Competition: Fußball-Regionalliga Nord (2026)
+   Kick-off:   2026-11-22 14:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+137. Excelsior Rotterdam vs FC Villareal
+   Competition: LaLiga EA Sports 2026/2027 (2026)
+   Kick-off:   2026-11-22 14:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+138. AFC Ajax vs ADO Den Haag
+   Competition: Eredivisie (2026)
+   Kick-off:   2026-11-22 14:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+139. Sparta Rotterdam vs AZ Alkmaar
+   Competition: Eredivisie (2026)
+   Kick-off:   2026-11-22 14:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+140. Hull City vs Brighton & Hove Albion
+   Competition: Premier League 2026/2027 (2026)
+   Kick-off:   2026-11-22 15:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+141. Hull City AFC vs Brighton & Hove Albion FC
+   Competition: Premier League (2026)
+   Kick-off:   2026-11-22 15:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+142. FC Augsburg vs 1. FSV Mainz 05
+   Competition: 1. Fußball-Bundesliga 2026/2027 (2026)
+   Kick-off:   2026-11-22 15:30 WAT
+   Status:     SCHEDULED
+   Source:     OpenLigaDB
+
+143. FC Rot-Weiß Erfurt vs Empty Stands Dummy Team
+   Competition: Empty Stands Spendenliga 2026/2027 (https://emptystands.me/aktivismus/spendenliga) (2026)
+   Kick-off:   2026-11-22 15:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+144. Altona 93 Frauen vs Empty Stands Dummy Team
+   Competition: Empty Stands Spendenliga 2026/2027 (https://emptystands.me/aktivismus/spendenliga) (2026)
+   Kick-off:   2026-11-22 15:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+145. 1. SC Göttingen 05 vs Empty Stands Dummy Team
+   Competition: Empty Stands Spendenliga 2026/2027 (https://emptystands.me/aktivismus/spendenliga) (2026)
+   Kick-off:   2026-11-22 15:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+146. FC Viktoria 1889 Berlin Frauen vs Empty Stands Dummy Team
+   Competition: Empty Stands Spendenliga 2026/2027 (https://emptystands.me/aktivismus/spendenliga) (2026)
+   Kick-off:   2026-11-22 15:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+147. RB Leipzig Frauen vs VfL Wolfsburg Frauen
+   Competition: 1. Frauen Fußballbundesliga 2026/2027 (2026)
+   Kick-off:   2026-11-22 16:00 WAT
+   Status:     SCHEDULED
+   Source:     OpenLigaDB
+
+148. Racing Santander vs Real Sociedad
+   Competition: LaLiga EA Sports 2026/2027 (2026)
+   Kick-off:   2026-11-22 16:15 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+149. 1. FC Saarbrücken vs SV Wehen Wiesbaden
+   Competition: 3. Liga 2026/2027 (2026)
+   Kick-off:   2026-11-22 16:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+150. Adler Mannheim vs Kölner Haie
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-22 16:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+151. Iserlohn Roosters vs Löwen Frankfurt
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-22 16:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+152. Schwenninger Wild Wings vs Augsburger Panther
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-22 16:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+153. Go Ahead Eagles vs Fortuna Sittard
+   Competition: Eredivisie (2026)
+   Kick-off:   2026-11-22 16:45 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+154. Eisbären Regensburg vs Starbulls Rosenheim
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 17:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+155. Eispiraten Crimmitschau vs EV Landshut
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 17:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+156. SV Werder Bremen vs Hamburger SV
+   Competition: 1. Fußball-Bundesliga 2026/2027 (2026)
+   Kick-off:   2026-11-22 17:30 WAT
+   Status:     SCHEDULED
+   Source:     OpenLigaDB
+
+157. FC Liverpool vs Manchester United FC
+   Competition: Premier League 2026/2027 (2026)
+   Kick-off:   2026-11-22 17:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+158. Liverpool FC vs Manchester United FC
+   Competition: Premier League (2026)
+   Kick-off:   2026-11-22 17:30 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+159. 1. FSV Mainz 05 Frauen vs 1. FC Nürnberg Frauen
+   Competition: 1. Frauen Fußballbundesliga 2026/2027 (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     SCHEDULED
+   Source:     OpenLigaDB
+
+160. Blue Devils Weiden vs Dresdner Eislöwen
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+161. ECDC Memmingen vs EC Kassel Huskies
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+162. EHC Freiburg vs Ravensburg Towerstars
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+163. Düsseldorfer EG vs Lausitzer Füchse
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+164. EC Bad Nauheim vs Bietigheim Steelers
+   Competition: DEL2 Hauptrunde (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+165. SC Cambuur vs FC Malaga
+   Competition: LaLiga EA Sports 2026/2027 (2026)
+   Kick-off:   2026-11-22 18:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+166. Krefeld Pinguine vs Grizzlys Wolfsburg
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-22 19:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+167. MSV Duisburg vs Hansa Rostock
+   Competition: 3. Liga 2026/2027 (2026)
+   Kick-off:   2026-11-22 19:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+168. CA Paranaense vs Clube do Remo
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-22 20:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+169. FC Getafe vs AZ Alkmaar
+   Competition: LaLiga EA Sports 2026/2027 (2026)
+   Kick-off:   2026-11-22 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+170. Fluminense FC vs Mirassol FC
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-22 22:30 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+171. RB Bragantino vs CR Vasco da Gama
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-22 23:30 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+172. FC Bayern München Frauen vs TSG 1899 Hoffenheim Frauen
+   Competition: 1. Frauen Fußballbundesliga 2026/2027 (2026)
+   Kick-off:   2026-11-23 18:00 WAT
+   Status:     SCHEDULED
+   Source:     OpenLigaDB
+
+173. Levante UD vs Elche CF
+   Competition: LaLiga EA Sports 2026/2027 (2026)
+   Kick-off:   2026-11-23 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+174. Brentford F.C. vs Everton FC
+   Competition: Premier League 2026/2027 (2026)
+   Kick-off:   2026-11-23 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+175. Brentford FC vs Everton FC
+   Competition: Premier League (2026)
+   Kick-off:   2026-11-23 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+176. SC Internacional vs EC Vitória
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-23 23:30 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+177. Botafogo FR vs São Paulo FC
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-24 00:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+178. Santos FC vs Grêmio FBPA
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-24 01:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+179. Galatasaray Istanbul vs Aston Villa
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 18:45 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+180. FK Bodö/Glimt vs LASK
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 18:45 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+181. Galatasaray SK vs Aston Villa FC
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 18:45 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+182. FK Bodø/Glimt vs LASK Linz
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 18:45 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+183. Eisbären Berlin vs Löwen Frankfurt
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-24 19:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+184. Augsburger Panther vs Krefeld Pinguine
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-24 19:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+185. ERC Ingolstadt vs Pinguins Bremerhaven
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-24 19:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+186. Straubing Tigers vs Adler Mannheim
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-24 19:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+187. Kölner Haie vs Nürnberg Ice Tigers
+   Competition: DEL 2026/2027 (2026)
+   Kick-off:   2026-11-24 19:30 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+188. Cardiff City FC vs Preston North End FC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+189. Middlesbrough FC vs Swansea City AFC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+190. Portsmouth FC vs West Ham United FC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+191. Sheffield United FC vs Southampton FC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+192. Charlton Athletic FC vs Lincoln City FC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+193. Bristol City FC vs Wrexham AFC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+194. Norwich City FC vs Queens Park Rangers FC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 20:45 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+195. Real Madrid vs PSV Eindhoven
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+196. Manchester City vs SSC Napoli 
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+197. FC Arsenal vs Borussia Dortmund
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+198. Feyenoord Rotterdam vs FC Porto
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+199. Slovan Bratislava vs Real Betis
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+200. RB Leipzig vs RC Lens
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+201. Como 1907 vs AEK Athen
+   Competition: Champions League 2026/2027 (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     Scheduled
+   Source:     OpenLigaDB
+
+202. Wolverhampton Wanderers FC vs Derby County FC
+   Competition: Championship (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     SCHEDULED
+   Source:     football-data.org
+
+203. Real Madrid CF vs PSV
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+204. Manchester City FC vs SSC Napoli
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+205. Arsenal FC vs Borussia Dortmund
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+206. Feyenoord Rotterdam vs FC Porto
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+207. ŠK Slovan Bratislava vs Real Betis Balompié
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+208. RB Leipzig vs Racing Club de Lens
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+209. Como 1907 vs PAE AEK
+   Competition: UEFA Champions League (2026)
+   Kick-off:   2026-11-24 21:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+210. Chapecoense AF vs SE Palmeiras
+   Competition: Campeonato Brasileiro Série A (2026)
+   Kick-off:   2026-11-24 22:00 WAT
+   Status:     TIMED
+   Source:     football-data.org
+
+NOTES
+- Fixture coverage is limited to the leagues exposed by these providers.
+- A successful API connection does not guarantee every competition has fixtures in this date window.
+- Historical team statistics are still collected by the existing OpenLigaDB team_analysis.py module.
+- No fixtures or predictions are guaranteed to be complete.
+
+Database: /root/football_intelligence_bot/football.db
+=================================================================
+
+================================================
+TEAM PERFORMANCE
+================================================
+DIAGNOSTICS:
+Step timed out.
+
+MODEL & DATA DISCLAIMERS
+Predictions are estimates, not guarantees or financial advice.
+Fewer than five recommendations may be produced if data quality is inadequate.
+No bets are placed automatically. This model requires backtesting before performance claims.
