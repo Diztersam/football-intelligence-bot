@@ -44,6 +44,13 @@ origins = [
 ]
 origins.extend(["http://localhost:5173", "http://127.0.0.1:5173"])
 
+# Make project-root modules available to the backend.
+import sys
+from pathlib import Path
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 app = FastAPI(
     title="Football Intelligence API",
     description="Football-only prediction API for the Telegram Mini App",
